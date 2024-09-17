@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice - CureNet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .invoice-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .invoice-header, .invoice-footer {
+            text-align: center;
+        }
+        .invoice-header h1 {
+            color: #34C759;
+            margin: 0;
+        }
+        .invoice-header p {
+            margin: 5px 0;
+        }
+        .invoice-details, .invoice-summary {
+            margin: 20px 0;
+        }
+        .invoice-details h2, .invoice-summary h2 {
+            border-bottom: 2px solid #34C759;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            color: #34C759;
+        }
+        .invoice-details table, .invoice-summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invoice-details table th, .invoice-summary table th,
+        .invoice-details table td, .invoice-summary table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .invoice-details table th, .invoice-summary table th {
+            background-color: #34C759;
+            color: white;
+        }
+        .invoice-summary table td {
+            font-weight: bold;
+        }
+        .invoice-footer p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+            <h1>CureNet</h1>
+            <p>123 Healing Lane, Wellness City, HC 12345</p>
+            <p>Phone: (123) 456-7890 | Email: info@cure-net.com</p>
+        </div>
+
+        <!-- Invoice Details -->
+        <div class="invoice-details">
+            <h2>Invoice</h2>
+            <table>
+                <tr>
+                    <th>Invoice Number:</th>
+                    <td>#123456</td>
+                </tr>
+                <tr>
+                    <th>Date:</th>
+                    <td>{{appoint.date}}</td>
+                </tr>
+                <tr>
+                    <th>Patient Name:</th>
+                    <td>{{appoint.user}}</td>
+                </tr>
+                <tr>
+                    <th>Patient ID:</th>
+                    <td>P78910</td>
+                </tr>
+                <tr>
+                    <th>Appointment Time:</th>
+                    <td>{{appoint.time}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Services Provided -->
+        <div class="invoice-details">
+            <h2>Services Provided</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Consultation</td>
+                        <td>1</td>
+                        <td>Rs.{{appoint.doctor.fee}}</td>
+                        <td>Rs.{{appoint.doctor.fee}}</td>
+                    </tr>
+                    <!-- <tr>
+                        <td>Blood Test</td>
+                        <td>1</td>
+                        <td>Rs. 50.00</td>
+                        <td>Rs. 50.00</td>
+                    </tr> -->
+                    <!-- Add more rows as needed -->    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Invoice Summary -->
+        <div class="invoice-summary">
+            <h2>Summary</h2>
+            <table>
+                <tr>
+                    <th>Subtotal:</th>
+                    <td>Rs. {{appoint.doctor.fee}}</td>
+                </tr>
+                <tr>
+                    <th>Discount:</th>
+                    <td>Not Applied</td>
+                </tr>
+                <tr>
+                    <th><strong>Total:</strong></th>
+                    <td><strong>Rs. {{appoint.doctor.fee}}</strong></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Invoice Footer -->
+        <div class="invoice-footer">
+            <p>Thank you for choosing CureNet!</p>
+            <p>If you have any questions regarding this invoice, please contact us at (123) 456-7890 or email info@cure-net.com.</p>
+        </div>
+    </div>
+</body>
+</html>

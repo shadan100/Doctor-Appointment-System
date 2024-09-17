@@ -1,0 +1,134 @@
+{% load static %}
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #333;
+        }
+
+        .nav-link:hover {
+            color: #34C759;
+        }
+
+        .navbar-nav.ml-auto {
+            margin-left: auto;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .card {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-2 {
+            margin-top: 90px;
+            margin-bottom: 90px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body-2 {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        footer {
+            /* position: absolute; */
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        footer h2 {
+            margin-top: 0;
+        }
+
+        footer p {
+            color: #666;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="#" style="color: #34C759;">CureNet</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appointment' %}">Appointment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'doctors' %}">All Doctors</a>
+                </li>
+            </ul>
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+                <li style="padding-right: 20px; padding-top: 10px;">Signed in as <a
+                        href="{% url 'user_profile' %}">{{user}}</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"
+                        style="background-color: #34C759; color: #fff; padding: 10px 20px; border-radius: 5px;">Logout</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+    {% block body %}
+    {% endblock %}
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="color: #34C759;">CureNet</h2>
+                    <p>&copy; 2023 CureNet. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

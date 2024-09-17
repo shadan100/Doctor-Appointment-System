@@ -1,0 +1,92 @@
+{% extends "main/layout.html" %}
+{% block body %}
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dob').setAttribute('max', today);
+    });
+    function validateForm() {
+        // Get form elements
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const password = document.getElementById("password").value;
+        const confirmation = document.getElementById("confirmation").value;
+
+        // Validate email format (simple regex check)
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            return false; // Prevent form submission
+        }
+
+        // Validate phone format (assuming 10 digits for this example)
+        const phonePattern = /^\d{10}$/;
+        if (!phonePattern.test(phone)) {
+            alert("Please enter a valid 10-digit phone number.");
+            return false; // Prevent form submission
+        }
+
+        const passwordPattern = /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordPattern.test(password)) {
+            alert("Please enter a valid password. It must be at least 6 characters long, one lowercase letter, and one digit.");
+            return false; // Prevent form submission
+        }
+
+
+        // Validate password and confirmation match
+        if (password !== confirmation) {
+            alert("Passwords do not match.");
+            return false; // Prevent form submission
+        }
+
+        // If everything is valid
+        return true;
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Registration Form</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'register_doctor' %}" onsubmit="return validateForm()">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input name="username" type="text" class="form-control" id="username" placeholder="Enter username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input name="email" type="email" class="form-control" id="email" placeholder="Enter email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone:</label>
+                            <input name="phone" type="tel" class="form-control" id="phone" placeholder="Enter phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date of Birth:</label>
+                            <input name="dob" type="date" class="form-control" id="dob" placeholder="Enter date of birth" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Address:</label>
+                            <input name="address" type="text" class="form-control" id="address" placeholder="Enter address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input name="password" type="password" class="form-control" id="password" placeholder="Enter password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Confirm Password:</label>
+                            <input name="confirmation" type="password" class="form-control" id="password" placeholder="Confirm password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <p class="text-center">Already have Doctor's account<a href="{% url 'login_doctor' %}">Sign in</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

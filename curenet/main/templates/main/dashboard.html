@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor's Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #333;
+        }
+
+        .nav-link:hover {
+            color: #34C759;
+        }
+
+        .navbar-nav.ml-auto {
+            margin-left: auto;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .card {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-2 {
+            margin-top: 130px;
+            margin-bottom: 120px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body-2 {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        footer {
+            /* position: absolute; */
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        footer h2 {
+            margin-top: 0;
+        }
+
+        footer p {
+            color: #666;
+            margin-bottom: 0;
+        }
+        .header-color {
+            color: #34C759;
+        }
+
+        .btn-custom {
+            background-color: #34C759;
+            color: white;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #2a9d77;
+        }
+
+        .profile-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background: #ffffff;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .table-section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="#" style="color: #34C759;">CureNet</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+                <li style="padding-right: 20px; padding-top: 10px;">Signed in as {{user}}</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"
+                        style="background-color: #34C759; color: #fff; padding: 10px 20px; border-radius: 5px;">Logout</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Doctor Profile -->
+        <div class="profile-card">
+            <div class="text-center">
+                <img src="{{doctor.profile_image}}" alt="Doctor Profile" class="profile-image">
+            </div>
+            <h2 class="text-center header-color">Dr. {{doctor.user}}</h2>
+            <p><strong>Email:</strong> {{doctor.user.email}}</p>
+            <p><strong>Phone:</strong> {{doctor.user.phone}}</p>
+            <p><strong>Education:</strong> {{doctor.designation}}</p>
+            <p><strong>Specialization:</strong> {{doctor.speciality}}</p>
+            <p><strong>Experience:</strong> {{doctor.experience}} Years</p>
+            <div class="text-center">
+                <a href="{% url 'edit_dashboard' %}" class="btn btn-custom">Edit Details</a>
+            </div>
+        </div>
+
+        <!-- Tabs for Appointments -->
+        <div class="table-section">
+            <h3 class="header-color">Appointments</h3>
+            <ul class="nav nav-tabs" id="appointmentsTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pending-tab" data-toggle="tab" href="#pending" role="tab"
+                        aria-controls="pending" aria-selected="true">Booked/Pending Appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab"
+                        aria-controls="completed" aria-selected="false">Appointment History</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="appointmentsTabContent">
+                <!-- Booked/Pending Appointments -->
+                <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                    <table class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Patient</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if appointment %}
+                            {% if appointment|length %}
+                            {% for app in appointment %}
+                            {% if app.status == "Pending" %}
+                            <tr>
+                                <td>{{app.date}}</td>
+                                <td>{{app.time}}</td>
+                                <td>{{app.user}}</td>
+                                <td>{{app.status}}</td>
+                                <td>
+                                    <a href="{% url 'complete_appointment' app.id %}" class="btn btn-custom btn-sm">Mark
+                                        as Completed</a>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                            <!-- Repeat <tr> for more appointments -->
+                            {% else %}
+                            <tr>
+                                <td>No Pending Appointments</td>
+                            </tr>
+                            {% endif %}
+                            {% else %}
+                            <tr>
+                                <td>No Pending Appointments</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Completed Appointments -->
+                <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                    <table class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Patient</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if appointment %}
+                            {% if appointment|length %}
+                            {% for app in appointment %}
+                            {% if app.status == "Completed" %}
+                            <tr>
+                                <td>{{app.date}}</td>
+                                <td>{{app.time}}</td>
+                                <td>{{app.user}}</td>
+                                <td>{{app.status}}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                            <!-- Repeat <tr> for more completed appointments -->
+                            {% else %}
+                            <tr>
+                                <td>No Completed Appointment</td>
+                            </tr>
+                            {% endif %}
+                            {% else %}
+                            <tr>
+                                <td>No Completed Appointment</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="table-section">
+            <h3 class="header-color">Patient Reviews</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Review</th>
+                        <!-- <th>Date</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if reviews %}
+                    {% for review in reviews %}
+                    <tr>
+                        <td>{{review.user}}</td>
+                        <td>{{review.review}}</td>
+                        <!-- <td>2024-08-20</td> -->
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="3">No Reviews Available</td>
+                    </tr>
+                    <!-- Repeat <tr> for more reviews -->
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="color: #34C759;">CureNet</h2>
+                    <p>&copy; 2023 CureNet. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

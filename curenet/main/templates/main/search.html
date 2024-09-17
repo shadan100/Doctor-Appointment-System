@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Doctors</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #333;
+        }
+
+        .nav-link:hover {
+            color: #34C759;
+        }
+
+        .navbar-nav.ml-auto {
+            margin-left: auto;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .card {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-2 {
+            margin-top: 130px;
+            margin-bottom: 120px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body-2 {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        footer h2 {
+            margin-top: 0;
+        }
+
+        footer p {
+            color: #666;
+            margin-bottom: 0;
+        }
+        .filter-select {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px 0 0 10px;
+        }
+        .card-body {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .card-body .info {
+            margin-left: 20px;
+        }
+        .card-body .info h5 {
+            margin: 0;
+            color: #34C759;
+        }
+        .card-body .info p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="#" style="color: #34C759;">CureNet</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appointment' %}">Appointment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'doctors' %}">All Doctors</a>
+                </li>
+            </ul>
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+                <li style="padding-right: 20px; padding-top: 10px;">Signed in as <a href="{% url 'user_profile' %}">{{user}}</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"
+                        style="background-color: #34C759; color: #fff; padding: 10px 20px; border-radius: 5px;">Logout</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container mt-4">
+        <!-- Filter Selection -->
+        <div class="filter-select">
+            <label for="specialtyFilter" class="mr-2">Filter by Specialty:</label>
+            <select id="specialtyFilter" class="form-control w-auto">
+                <option value="all">All Specialties</option>
+                <option value="cardiology">Cardiology</option>
+                <option value="neurology">Neurology</option>
+                <option value="orthopedics">Orthopedics</option>
+                <option value="pediatrics">Pediatrics</option>
+                <!-- Add more specialties as needed -->
+            </select>
+        </div>
+
+        <!-- Doctor List -->
+         {% if message %}
+         <p><strong>{{message}}</strong></p>
+         {% else %}
+        <div class="row">
+            <!-- Doctor Card -->
+             {% for doctor in doctor %}
+            <div class="col-12">
+                <div class="card">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="{{doctor.profile_image}}" class="card-img" alt="Doctor 1">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="info">
+                                   <a href="{% url 'profile' doctor.id %}"><h5>Dr. {{doctor.user}}</h5></a> 
+                                    <p><strong>Specialty:</strong> {{doctor.speciality}}</p>
+                                    <p><strong>Available:</strong> Mon-Fri, {{doctor.start_time}} to {{doctor.end_time}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- More Doctor Cards -->
+            <!-- <div class="col-12">
+                <div class="card">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="doctor2.jpg" class="card-img" alt="Doctor 2">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="info">
+                                    <h5>Dr. Jane Smith</h5>
+                                    <p><strong>Specialty:</strong> Neurology</p>
+                                    <p><strong>Available:</strong> Mon, Wed, Fri, 10am - 3pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Add more doctor cards as needed -->
+        </div>
+        {% endif %}
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="color: #34C759;">CureNet</h2>
+                    <p>&copy; 2023 CureNet. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

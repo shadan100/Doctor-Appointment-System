@@ -1,0 +1,61 @@
+{% extends "main/layout.html" %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Registration Form</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'doctor_details' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="designation">Education Qualification:</label>
+                            <input name="designation" type="text" class="form-control" id="username" placeholder="Education Qualification" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="speciality">Speciality:</label>
+                            <select name="speciality" type="text" class="form-control" id="email" placeholder="Speciality" required>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="dermatology">Dermatology</option>
+                                <option value="neurology">Neurologyt</option>
+                                <option value="pediatrician">Pediatrician</option>
+                                <option value="psychiatry">Psychiatry</option>
+                                <option value="orthopedics">Orthopedics</option>
+                                <option value="gynecology">Gynecology</option>
+                                <option value="urology">Urology</option>
+                                <option value="oncology">Oncology</option>
+                            </select>
+                            <!-- <label for="speciality">Speciality:</label>
+                            <input name="speciality" type="text" class="form-control" id="email" placeholder="Speciality" required> -->
+                        </div>
+                        <div class="form-group">
+                            <label for="experience">Experience:</label>
+                            <input name="experience" type="number" class="form-control" id="phone" placeholder="Experience" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="info">About yourself:</label>
+                            <textarea name="info" class="form-control" id="dob" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="timing">Your Time Schedule:</label>
+                            Start: <input name="start_time" type="time" class="form-control" id="location" required>
+                            End: <input name="end_time" type="time" class="form-control" id="location"  required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fee">Fee:</label>
+                            <input name="fee" type="number" class="form-control" id="password" placeholder="Enter Fee" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile">Profile Picture:</label>
+                            <input name="image" type="file" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,152 @@
+<html>
+
+<head>
+    <title>Appointment</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #333;
+        }
+
+        .nav-link:hover {
+            color: #34C759;
+        }
+
+        .navbar-nav.ml-auto {
+            margin-left: auto;
+        }
+
+        /* styles.css */
+        .table thead th {
+            background-color: #34C759;
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        footer h2 {
+            margin-top: 0;
+        }
+
+        footer p {
+            color: #666;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="#" style="color: #34C759;">CureNet</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appointment' %}">Appointment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'doctors' %}">All Doctors</a>
+                </li>
+            </ul>
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+                <li style="padding-right: 20px; padding-top: 10px;">Signed in as <a href="{% url 'user_profile' %}">{{user}}</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"
+                        style="background-color: #34C759; color: #fff; padding: 10px 20px; border-radius: 5px;">Logout</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2 class="mb-4">My Appointments</h2>
+
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Doctor</th>
+                    <th scope="col">Date and Time</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Fee</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.doctor.user}}</td>
+                    <td>{{ appointment.date }} {{ appointment.time }}</td>
+                    <td>{{ appointment.status }}</td>
+                    <td>${{ appointment.doctor.fee }}</td>
+                    {% if appointment.status == "Pending" %}
+                    <td>
+                        <form method="post" action="{% url 'cancel_appointment' appointment.doctor.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                        </form>
+                        <form method="post" action="{% url 'invoice' appointment.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Generate Invoice</button>
+                        </form>
+                    </td>
+                    {% else %}
+                    <td><form method="post" action="{% url 'cancel_appointment' appointment.doctor.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form></td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No appointments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="color: #34C759;">CureNet</h2>
+                    <p>&copy; 2023 CureNet. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
